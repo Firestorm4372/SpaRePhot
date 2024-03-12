@@ -1,0 +1,29 @@
+images:
+  folder: /home/jades/jades-data/GOODS-S/images/JWST/JADES/v0.9
+  # expects structure of filter/mosaic.fits
+  filename: mosaic_?.fits # use ? for placeholder for filter
+
+catalogs:
+  folder: /home/jades/jades-data/GOODS-S/catalogs/JWST/JADES/v0.9
+  phot_cat: phot_cat.v0.9.3.fits
+  segmap: segmap.v0.9.3.fits
+
+filters:
+  - F070W
+  - F090W
+  - F115W
+  - F150W
+  - F162M
+  - F182M
+  - F200W
+  - F210M
+  - F250M
+  - F277W
+  - F300M
+  - F335M
+  - F356W
+  - F410M
+  - F430M
+  - F444W
+  - F460M
+  - F480M
