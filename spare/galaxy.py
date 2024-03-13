@@ -1,0 +1,74 @@
+import numpy as np
+
+from .data import Data
+
+
+class Pixel():
+    
+    def __init__(self, pixel_id:int, galaxy_id:int, filter_values:dict, filter_errors:dict) -> None:
+        self.id = pixel_id
+        self.galaxy_id = galaxy_id
+
+        self.values = filter_values
+        self.errors = filter_errors
+
+
+class Galaxy():
+    """
+    Holder for a single galaxy (object)
+
+    Parameters
+    ----------
+    id : int
+        Survey id of the object
+    centroid : tuple[float]
+        (Y,X) position of the centre of the object
+    bbox : array
+        Bounding box for the object.
+        In the form ((YMIN, YMAX), (XMIN, XMAX))
+    values, errors : dict[str, array]
+        Value and error images for each of the filters
+    segmap : array
+        Segmentation image
+    """
+
+    def __init__(self, id:int, centroid:tuple[float], bbox:np.ndarray, values:dict[str, np.ndarray], errors:dict[str, np.ndarray], segmap:np.ndarray) -> None:
+        self.id = id
+        
+        self.centroid = centroid
+        self.Y, self.X = centroid
+
+        self.bbox = bbox
+        self.ymin, self.ymax = bbox[0]
+        self.xmin, self.xmax = bbox[1]
+
+        self.values = values
+        self.errors = errors
+        self.segmap = segmap
+
+        self.size = segmap.size
+
+
+def extract_galaxy(id: int, data:Data, border:int=1) -> Galaxy:
+    # get relevant data from size_cat
+    x = data.size_cat['X']
+    y = data.size_cat['Y']
+    xmin = data.size_cat['BBOX_XMIN']
+    xmax = data.size_cat['BBOX_XMAX']
+    ymin = data.size_cat['BBOX_YMIN']
+    ymax = data.size_cat['BBOX_YMAX']
+
+    centroid = (y, x)
+    bbox = np.array([[ymin, ymax], [xmin, xmax]])
+
+    # extract images
+    xmin_b = xmin - border
+    xmax_b = xmax + border + 1
+    ymin_b = ymin - border
+    ymax_b = ymax + border + 1
+    values = {filt:im[ymin_b:ymax_b, xmin_b:xmax_b] for (filt, im) in data.images.values.items()}
+    errors = {filt:im[ymin_b:ymax_b, xmin_b:xmax_b] for (filt, im) in data.images.errors.items()}
+    segmap = data.segmap[ymin_b:ymax_b, xmin_b:xmax_b]
+
+    return Galaxy(id, centroid, bbox, values, errors, segmap)
+ 
