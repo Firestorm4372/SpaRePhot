@@ -1,5 +1,4 @@
 import yaml
-
 import numpy as np
 from astropy.io import fits
 from astropy.table import Table
@@ -95,12 +94,3 @@ class Data():
 
         self.images = Images(self.filters, self.paths.images)
         
-
-
-
-def main() -> None:
-    data = Data('/Users/liambrown/repositories/SpaRePhot/config.yml')
-    print(data.paths.images['F070W'])
-
-if __name__ == '__main__':
-    main()
