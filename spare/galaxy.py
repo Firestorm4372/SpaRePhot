@@ -51,12 +51,12 @@ class Galaxy():
 
 def extract_galaxy(id: int, data:Data, border:int=1) -> Galaxy:
     # get relevant data from size_cat
-    x = data.size_cat['X']
-    y = data.size_cat['Y']
-    xmin = data.size_cat['BBOX_XMIN']
-    xmax = data.size_cat['BBOX_XMAX']
-    ymin = data.size_cat['BBOX_YMIN']
-    ymax = data.size_cat['BBOX_YMAX']
+    x = data.size_cat.loc[id]['X']
+    y = data.size_cat.loc[id]['Y']
+    xmin = data.size_cat.loc[id]['BBOX_XMIN']
+    xmax = data.size_cat.loc[id]['BBOX_XMAX']
+    ymin = data.size_cat.loc[id]['BBOX_YMIN']
+    ymax = data.size_cat.loc[id]['BBOX_YMAX']
 
     centroid = (y, x)
     bbox = np.array([[ymin, ymax], [xmin, xmax]])

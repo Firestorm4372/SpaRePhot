@@ -88,7 +88,8 @@ class Data():
 
         with fits.open(self.paths.phot_cat) as hdul:
             self.size_cat = Table(hdul['SIZE'].data)
-        
+        self.size_cat.add_index('ID')
+                
         with fits.open(self.paths.segmap) as hdul:
             self.segmap:np.ndarray = hdul[0].data
 
