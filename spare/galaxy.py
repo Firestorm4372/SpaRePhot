@@ -45,6 +45,11 @@ class Galaxy():
 
         self.pixel_ids = np.arange(self.size, dtype=int).reshape(self.shape)
 
+    
+    def __repr__(self) -> str:
+        string = f'Galaxy: {self.id}, (X,Y)({self.X}, {self.Y}), shape{self.shape}'
+        return string
+
 
 def extract_galaxy(id: int, data:Data, border:int=1) -> Galaxy:
     # get relevant data from size_cat
