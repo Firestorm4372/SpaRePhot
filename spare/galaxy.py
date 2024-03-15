@@ -49,6 +49,14 @@ class Galaxy():
     def __repr__(self) -> str:
         string = f'Galaxy: {self.id}, (X,Y)({self.X}, {self.Y}), shape{self.shape}'
         return string
+    
+    def info_dict(self) -> dict:
+        return {
+            'id': self.id,
+            'centroid': self.centroid,
+            'bbox': self.bbox,
+            'shape': self.shape
+        }
 
 
 def extract_galaxy(id: int, data:Data, border:int=0) -> Galaxy:
@@ -69,7 +77,7 @@ def extract_galaxy(id: int, data:Data, border:int=0) -> Galaxy:
     galaxy : Galaxy
         Created `Galaxy` object
     """
-    
+
     # get relevant data from size_cat
     x = data.size_cat.loc[id]['X']
     y = data.size_cat.loc[id]['Y']
