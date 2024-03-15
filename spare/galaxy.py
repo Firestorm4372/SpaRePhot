@@ -51,7 +51,25 @@ class Galaxy():
         return string
 
 
-def extract_galaxy(id: int, data:Data, border:int=1) -> Galaxy:
+def extract_galaxy(id: int, data:Data, border:int=0) -> Galaxy:
+    """
+    Return the galaxy object specified, with border specifying extra pixels around the segmap
+
+    Parameters
+    ----------
+    id : int
+        JADES ID of the object
+    data : Data
+        `Data` object with relevant images
+    border : int, default 0
+        Number of extra pixels around the segmap to include
+
+    Returns
+    -------
+    galaxy : Galaxy
+        Created `Galaxy` object
+    """
+    
     # get relevant data from size_cat
     x = data.size_cat.loc[id]['X']
     y = data.size_cat.loc[id]['Y']
