@@ -48,6 +48,8 @@ class OverManage():
             id of the run just created
         """
 
+        self._extract_runs()
+
         if self.runs_df.shape[0] == 0:
             id = 0
         else:
@@ -65,10 +67,13 @@ class OverManage():
 
 
     def run_folder(self, run_id:int) -> str:
+        self._extract_runs()
         return f"{self.folder}/{run_id}_{self.runs_df.loc[run_id]['name']}"
 
     
     def delete_run(self, run_id:int) -> None:
+        self._extract_runs()
+
         to_delete = self.run_folder(run_id)
         try:
             self.runs_df.drop(run_id, inplace=True)
@@ -79,6 +84,8 @@ class OverManage():
         self._runs_to_csv()
 
     def delete_all_runs(self) -> None:
+        self._extract_runs()
+        
         sure = input('Type y if sure: ')
         if sure == 'y':
             for run_id in self.runs_df.index:

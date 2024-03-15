@@ -38,8 +38,11 @@ class Prep():
             np.save(f'{folder}/segmap.npy', galaxy.segmap)
 
 
-    def select_and_save(self, name:str, ids:list[int], border:int=0) -> None:
+    def select_and_save(self, name:str, ids:list[int], border:int=0) -> int:
+        """Returns `run_id`"""
         selection = self._galaxy_selection(ids, border)
         run_id = self._generate_run(name, len(selection))
         self._save_selection(selection, run_id)
+        
+        return run_id
 

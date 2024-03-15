@@ -1,5 +1,6 @@
 import unittest
 
+import json
 import numpy as np
 
 import spare
@@ -31,6 +32,25 @@ class TestGalaxy(unittest.TestCase):
         segmap_shape = self.galaxy.segmap.shape
         image_shape = self.galaxy.values[filter].shape
         self.assertEqual(segmap_shape, image_shape)
+
+
+class TestOverManageAndSave(unittest.TestCase):
+    def setUp(self) -> None:
+        self.fm = spare.filemanage.OverManage()
+        self.prep = spare.EAZYprep.Prep()
+        if self.fm.runs_df.shape[0] == 0:
+            self.run_id_to_delete = 0
+        else:
+            self.run_id_to_delete = self.fm.runs_df.index[-1] + 1
+
+    def testGoodSave(self) -> None:
+        run_id = self.prep.select_and_save('test', [55733, 74977, 183348], 0)
+        with open(f'{self.fm.run_folder(run_id)}/galaxies/0/info.txt') as f:
+            id = json.load(f)['id']
+        self.assertEqual(id, 55733)
+
+    def tearDown(self) -> None:
+        self.fm.delete_run(self.run_id_to_delete)
 
 if __name__ == '__main__':
     unittest.main()
