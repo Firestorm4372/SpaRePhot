@@ -1,3 +1,8 @@
+# where to place program outputs
+output:
+  folder: .output
+
+# image and catalog location and names
 images:
   folder: /home/jades/jades-data/GOODS-S/images/JWST/JADES/v0.9
   # expects structure of filter/mosaic.fits
@@ -8,6 +13,7 @@ catalogs:
   phot_cat: phot_cat.v0.9.3.fits
   segmap: segmap.v0.9.3.fits
 
+# filters used in images etc
 filters:
   - F070W
   - F090W
@@ -28,6 +34,7 @@ filters:
   - F460M
   - F480M
 
+# for viewer module
 viewer:
   blue:
     - F090W

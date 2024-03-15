@@ -1,3 +1,7 @@
+# local data
+.output
+.logs
+
 # mac stuff
 .DS_Store
 
