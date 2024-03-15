@@ -31,7 +31,23 @@ class OverManage():
             self.runs_df = pd.read_csv(runs_filepath, index_col='id')
 
 
-    def add_run(self, name:str, num_obj:int) -> None:
+    def add_run(self, name:str, num_obj:int) -> int:
+        """
+        Add a new run folder
+
+        Parameters
+        ----------
+        name : str
+            Name to give run
+        num_obj : int
+            Number of objects in the run
+
+        Returns
+        -------
+        run_id : int
+            id of the run just created
+        """
+        
         if self.runs_df.shape[0] == 0:
             id = 0
         else:
