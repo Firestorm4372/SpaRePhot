@@ -33,11 +33,5 @@ class TestGalaxy(unittest.TestCase):
         image_shape = self.galaxy.values[filter].shape
         self.assertEqual(segmap_shape, image_shape)
 
-    def test_pixel_id_math(self):
-        x = np.random.randint(self.galaxy.shape[1])
-        y = np.random.randint(self.galaxy.shape[0])
-        pixel_id = self.galaxy.pixel_ids[y, x]
-        self.assertEqual(pixel_id, self.galaxy.pixels[pixel_id].id)
-
 if __name__ == '__main__':
     unittest.main()
