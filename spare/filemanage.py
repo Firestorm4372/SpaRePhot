@@ -51,12 +51,13 @@ class OverManage():
         self._extract_runs()
 
         if self.runs_df.shape[0] == 0:
+            self.runs_df = pd.DataFrame({'name': [name], 'num_obj': [num_obj]})
             id = 0
         else:
             id = self.runs_df.index[-1] + 1
+            new_run = pd.DataFrame({'name': [name], 'num_obj': [num_obj]}, [id])
+            self.runs_df = pd.concat([self.runs_df, new_run])
 
-        new_run = pd.DataFrame({'name': [name], 'num_obj': [num_obj]}, [id])
-        self.runs_df = pd.concat([self.runs_df, new_run])
 
         self.runs_df.sort_index()
         self._runs_to_csv()
@@ -85,7 +86,7 @@ class OverManage():
 
     def delete_all_runs(self) -> None:
         self._extract_runs()
-        
+
         sure = input('Type y if sure: ')
         if sure == 'y':
             for run_id in self.runs_df.index:
