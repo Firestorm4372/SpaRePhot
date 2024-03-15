@@ -6,7 +6,7 @@ import numpy as np
 from .filemanage import OverManage
 from .data import Data
 from .galaxy import Galaxy
-import galaxy
+from . import galaxy
 
 class Prep():
     
@@ -30,9 +30,16 @@ class Prep():
             folder = f'{galaxies_folder}/{i}'
             os.makedirs(folder)
 
-            with open(f'{folder}/info.txt') as f:
-                f.write(json.dump(galaxy.info_dict))
+            with open(f'{folder}/info.txt', 'w') as f:
+                json.dump(galaxy.info_dict(), f)
 
-            np.savez(f'{folder}/values.npz', *galaxy.values)
-            np.savez(f'{folder}/errors.npz', *galaxy.errors)
+            np.savez(f'{folder}/values.npz', **galaxy.values)
+            np.savez(f'{folder}/errors.npz', **galaxy.errors)
             np.save(f'{folder}/segmap.npy', galaxy.segmap)
+
+
+    def select_and_save(self, name:str, ids:list[int], border:int=0) -> None:
+        selection = self._galaxy_selection(ids, border)
+        run_id = self._generate_run(name, len(selection))
+        self._save_selection(selection, run_id)
+

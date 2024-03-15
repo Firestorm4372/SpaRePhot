@@ -47,7 +47,7 @@ class OverManage():
         run_id : int
             id of the run just created
         """
-        
+
         if self.runs_df.shape[0] == 0:
             id = 0
         else:
@@ -59,15 +59,17 @@ class OverManage():
         self.runs_df.sort_index()
         self._runs_to_csv()
 
-        os.makedirs(f'{id}_{name}')
+        os.makedirs(f'{self.folder}/{id}_{name}')
+
+        return id
 
 
     def run_folder(self, run_id:int) -> str:
-        return f"{self.folder}/{run_id}/{self.runs_df.loc[run_id]['name']}"
+        return f"{self.folder}/{run_id}_{self.runs_df.loc[run_id]['name']}"
 
     
     def delete_run(self, run_id:int) -> None:
-        to_delete = f"{run_id}_{self.runs_df.loc[run_id]['name']}"
+        to_delete = self.run_folder(run_id)
         try:
             self.runs_df.drop(run_id, inplace=True)
         except:

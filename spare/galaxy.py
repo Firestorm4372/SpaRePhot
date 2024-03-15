@@ -54,7 +54,10 @@ class Galaxy():
         return {
             'id': self.id,
             'centroid': self.centroid,
-            'bbox': self.bbox,
+            'xmin': int(self.xmin),
+            'xmax': int(self.xmax),
+            'ymin': int(self.ymin),
+            'ymax': int(self.ymax),
             'shape': self.shape
         }
 
