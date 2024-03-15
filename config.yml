@@ -27,3 +27,11 @@ filters:
   - F444W
   - F460M
   - F480M
+
+viewer:
+  blue:
+    - F090W
+  green:
+    - F200W
+  red:
+    - F444W
