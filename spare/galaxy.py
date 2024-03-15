@@ -30,6 +30,12 @@ class Galaxy():
         Value and error images for each of the filters
     segmap : array
         Segmentation image
+    shape, size : tuple, int
+        Shape and size of all images in the object
+    pixel_ids : ndarray
+        ids of each of the `Pixel`s in the galaxy, stored in an array
+    pixels : list[Pixel]
+        Each of the `Pixel`s in the galaxy. Ordered according to ids
     """
 
     def __init__(self, id:int, centroid:tuple[float], bbox:np.ndarray, values:dict[str, np.ndarray], errors:dict[str, np.ndarray], segmap:np.ndarray) -> None:
@@ -46,7 +52,27 @@ class Galaxy():
         self.errors = errors
         self.segmap = segmap
 
+        self.shape = segmap.shape
         self.size = segmap.size
+
+        self.pixel_ids = np.arange(self.size, dtype=int).reshape(self.shape)
+        self.pixels = self._create_all_pixels_list()
+
+    
+    def _create_single_pixel(self, pixel_id:int, x_idx:int, y_idx:int) -> Pixel:
+        values = {k: v[y_idx, x_idx] for (k, v) in self.values.items()}
+        errors = {k: e[y_idx, x_idx] for (k, e) in self.errors.items()}
+        return Pixel(pixel_id, self.id, values, errors)
+    
+    def _create_all_pixels_list(self) -> list[Pixel]:
+        pixels = []
+
+        for y_idx, row in enumerate(self.pixel_ids):
+            for x_idx, pixel_id in enumerate(row):
+                pix = self._create_single_pixel(pixel_id, x_idx, y_idx)
+                pixels.append(pix)
+
+        return pixels
 
 
 def extract_galaxy(id: int, data:Data, border:int=1) -> Galaxy:
