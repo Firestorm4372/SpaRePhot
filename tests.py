@@ -2,10 +2,11 @@ import unittest
 
 import numpy as np
 
+import spare
+
 class TestData(unittest.TestCase):
     def setUp(self):
-        from spare.data import Data
-        self.data = Data()
+        self.data = spare.data.Data()
 
     def test_size_cat_import(self):
         self.assertNotEqual(len(self.data.size_cat), 0)
@@ -18,11 +19,9 @@ class TestData(unittest.TestCase):
 
 class TestGalaxy(unittest.TestCase):
     def setUp(self) -> None:
-        from spare.data import Data
-        from spare import galaxy
-        data = Data()
+        data = spare.data.Data()
         id = data.size_cat['ID'][np.random.randint(len(data.size_cat))]
-        self.galaxy = galaxy.extract_galaxy(id, data)
+        self.galaxy = spare.galaxy.extract_galaxy(id, data)
 
     def test_id_in_segmap(self):
         self.assertTrue(np.isin(self.galaxy.id, self.galaxy.segmap))
