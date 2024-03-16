@@ -23,7 +23,7 @@ class Galaxy():
     shape, size : tuple, int
         Shape and size of all images in the object
     pixel_ids : ndarray
-        ids map of the different pixels in the galaxy
+        ids map of the different pixels in the galaxy, increasing first in x (`pixel_ids[0,1]=1` etc)
     """
 
     def __init__(self, id:int, centroid:tuple[float], bbox:np.ndarray, values:dict[str, np.ndarray], errors:dict[str, np.ndarray], segmap:np.ndarray) -> None:
