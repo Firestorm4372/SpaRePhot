@@ -92,3 +92,14 @@ class OverManage():
             for run_id in self.runs_df.index:
                 self.delete_run(run_id)
 
+    
+    def add_run_description(self, run_id:int, description:str) -> None:
+        """
+        Create description.txt in run folder with description of the run
+        """
+
+        filepath = f'{self.run_folder(run_id)}/description.txt'
+
+        with open(filepath, 'w') as f:
+            f.write(description)
+
