@@ -43,7 +43,8 @@ class Galaxy():
         self.shape = segmap.shape
         self.size = segmap.size
 
-        self.pixel_ids = np.arange(self.size, dtype=int).reshape(self.shape)
+        self.pixel_ids_flat = np.arange(self.size, dtype=int)
+        self.pixel_ids = self.pixel_ids_flat.reshape(self.shape)
 
     
     def __repr__(self) -> str:
