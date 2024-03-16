@@ -37,14 +37,15 @@ class TestGalaxy(unittest.TestCase):
 class TestOverManageAndSave(unittest.TestCase):
     def setUp(self) -> None:
         self.fm = spare.filemanage.OverManage()
-        self.prep = spare.EAZYprep.Prep()
+        self.prep = spare.EAZYprep.Select()
         if self.fm.runs_df.shape[0] == 0:
             self.run_id_to_delete = 0
         else:
             self.run_id_to_delete = self.fm.runs_df.index[-1] + 1
 
     def testGoodSave(self) -> None:
-        run_id = self.prep.select_and_save('test', [55733, 74977, 183348], 0)
+        self.prep.select_and_save('test', [55733, 74977, 183348], 0)
+        run_id = self.prep.run_id
         with open(f'{self.fm.run_folder(run_id)}/galaxies/0/info.txt') as f:
             id = json.load(f)['id']
         self.assertEqual(id, 55733)
