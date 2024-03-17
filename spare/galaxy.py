@@ -55,7 +55,7 @@ class Galaxy():
     
     def info_dict(self) -> dict:
         return {
-            'id': self.id,
+            'id': int(self.id),
             'centroid': self.centroid,
             'xmin': int(self.xmin),
             'xmax': int(self.xmax),
