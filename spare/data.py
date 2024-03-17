@@ -50,7 +50,7 @@ class Images():
 
     def __init__(self, filters:list[str], image_paths:dict[str, str]) -> None:
         self.values:dict[str, np.ndarray] = dict()
-        self.errors = dict()
+        self.errors:dict[str, np.ndarray] = dict()
 
         for filt in filters:
             path = image_paths[filt]
@@ -58,7 +58,7 @@ class Images():
             with fits.open(path) as hdul:
                 self.values[filt] = hdul['SCI'].data
                 self.errors[filt] = hdul['ERR'].data
-            
+        
 
 class Data():
     """

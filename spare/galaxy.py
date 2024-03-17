@@ -1,3 +1,5 @@
+from typing import Literal
+
 import numpy as np
 
 from .data import Data
@@ -61,6 +63,41 @@ class Galaxy():
             'ymax': int(self.ymax),
             'shape': self.shape
         }
+    
+
+    def replace_unused_with_constant(self, unused:float, replace:float, using:Literal['values', 'errors']='errors', verbose:bool=False) -> None:
+        """
+        Set pixels that do not have data to a different value.
+        e.g. set all `0.0` pixels to `-9999` so they are recognisable and ignored by EAZY.
+
+        Replaces in both values and errors images.
+
+        Parameters
+        ----------
+        unused : float
+            The value that pixels will have when unused, e.g. `0.0` in above
+        replace : float
+            What to replace unused values with, e.g. `-9999` in above
+        using : Literal['values', 'errors'], default errors
+            Which images to use to search for the unused value.
+        verbose : bool, default False
+            Control verbosity as executing
+        """
+        
+        using_images:dict[str, np.ndarray] = getattr(self, using)
+
+        if verbose:
+            print('Replacing: ')
+
+        for filt, image in using_images.items():
+            if verbose:
+                print(filt, end=', ')
+            condition = (image == unused)
+            self.values[filt] = np.where(condition, replace, self.values[filt])
+            self.errors[filt] = np.where(condition, replace, self.errors[filt])
+            
+        if verbose:
+            print('\nDone')
 
 
 def extract_galaxy(id: int, data:Data, border:int=0) -> Galaxy:
