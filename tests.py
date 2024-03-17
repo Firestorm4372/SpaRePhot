@@ -21,8 +21,10 @@ class TestData(unittest.TestCase):
 class TestGalaxy(unittest.TestCase):
     def setUp(self) -> None:
         data = spare.data.Data()
-        id = data.size_cat['ID'][np.random.randint(len(data.size_cat))]
-        self.galaxy = spare.galaxy.extract_galaxy(id, data)
+        self.galaxy = spare.galaxy.extract_galaxy(55733, data)
+        # add in an 'unused' pixel to later test against
+        self.filter_key = [k for k in self.galaxy.errors.keys()][0]
+        self.galaxy.errors[self.filter_key][0,0] = -999
 
     def test_id_in_segmap(self):
         self.assertTrue(np.isin(self.galaxy.id, self.galaxy.segmap))
@@ -32,6 +34,11 @@ class TestGalaxy(unittest.TestCase):
         segmap_shape = self.galaxy.segmap.shape
         image_shape = self.galaxy.values[filter].shape
         self.assertEqual(segmap_shape, image_shape)
+
+    def test_replace_unused(self):
+        self.galaxy.replace_unused_with_constant(-999, -9999)
+        pixel = self.galaxy.errors[self.filter_key][0,0]
+        self.assertEqual(-9999, pixel)
 
 
 class TestOverManageAndSave(unittest.TestCase):
