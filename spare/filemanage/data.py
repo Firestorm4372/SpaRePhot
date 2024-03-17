@@ -3,6 +3,10 @@ import numpy as np
 from astropy.io import fits
 from astropy.table import Table
 
+
+__all__ = ['Data', 'Paths', 'Images']
+
+
 class Paths():
     """
     Contains the various paths to input data.

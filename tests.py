@@ -7,7 +7,7 @@ import spare
 
 class TestData(unittest.TestCase):
     def setUp(self):
-        self.data = spare.data.Data()
+        self.data = spare.filemanage.Data()
 
     def test_size_cat_import(self):
         self.assertNotEqual(len(self.data.size_cat), 0)
@@ -20,8 +20,8 @@ class TestData(unittest.TestCase):
 
 class TestGalaxy(unittest.TestCase):
     def setUp(self) -> None:
-        data = spare.data.Data()
-        self.galaxy = spare.galaxy.extract_galaxy(55733, data)
+        data = spare.filemanage.Data()
+        self.galaxy = spare.extract_galaxy(55733, data)
         # add in an 'unused' pixel to later test against
         self.filter_key = [k for k in self.galaxy.errors.keys()][0]
         self.galaxy.errors[self.filter_key][0,0] = -999
@@ -43,8 +43,8 @@ class TestGalaxy(unittest.TestCase):
 
 class TestOverManageAndSave(unittest.TestCase):
     def setUp(self) -> None:
-        self.fm = spare.filemanage.OverManage()
-        self.selection = spare.EAZYprep.SelectGalaxies([55733, 74977, 183348])
+        self.fm = spare.filemanage.RunManager()
+        self.selection = spare.EAZYprep.SelectionGalaxies([spare.extract_galaxy(id, spare.filemanage.Data()) for id in [55733, 74977, 183348]])
         if self.fm.runs_df.shape[0] == 0:
             self.run_id_to_delete = 0
         else:

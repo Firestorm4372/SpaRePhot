@@ -5,7 +5,10 @@ import yaml
 import pandas as pd
 
 
-class OverManage():
+__all__ = ['RunManager']
+
+
+class RunManager():
 
     def __init__(self, config_file:str='config.yml') -> None:
         # extract location of output folder
