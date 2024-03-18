@@ -2,13 +2,31 @@ from typing import Literal
 
 import numpy as np
 
-from .filemanage.data import Data
+from .filemanage import Data
 from .galaxy import Galaxy
 from .EAZYprep import SelectionGalaxies, FileEAZY
 
 
-__all__ = ['extract_galaxy', 'prep_for_EAZY']
+__all__ = ['random_id', 'extract_galaxy', 'prep_for_EAZY']
 
+
+def random_id(data:Data) -> int:
+    """
+    Return a random id from the dataset.
+
+    Parameters
+    ----------
+    data : Data
+        `Data` object to extract id from
+
+    Returns
+    -------
+    id : int
+        Randomly chosen id from the dataset
+    """
+
+    id = data.size_cat.iloc[np.random.randint(len(data.size_cat))]['ID']
+    return int(id)
 
 def extract_galaxy(id: int, data:Data, border:int=0) -> Galaxy:
     """
@@ -56,7 +74,7 @@ def prep_for_EAZY(
         name:str, ids:list[int], border:int=0,
         replace_unused:bool=False, unused:float|None=None, replace:float|None=None, using:Literal['values', 'errors']='errors', verbose_replace:bool=False,
         description:str|None=None, config_file:str='config.yml'
-    ) -> str:
+    ) -> int:
     """
     Create and save all data for an EAZY run.
 
@@ -83,6 +101,11 @@ def prep_for_EAZY(
         Optional description to add to the run
     config_file : str, default config.yml
         Config file to be used
+
+    Returns
+    -------
+    run_id : int
+        id to identify the run created
     """
 
     # create galaxy selection
@@ -101,8 +124,11 @@ def prep_for_EAZY(
     run_folder = selection.runmanage.run_folder(selection.run_id)
     FileEAZY(selection.galaxies).save_csv_file(f'{run_folder}/EAZY_input.csv')
 
+    # copy over config
+    selection.runmanage.make_config_copy(f'{run_folder}/config.yml')
+
     if description is not None:
         selection.runmanage.add_run_description(selection.run_id, description)
     
-    return run_folder
+    return selection.run_id
 
