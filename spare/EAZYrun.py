@@ -120,3 +120,4 @@ def init_wrapper_from_hdf5(run_id:int, config_file:str='config.yml') -> WrapperE
     wrapper = WrapperEAZY(run_id, config_file)
     wrapper.photoz = eazy.hdf5.initialize_from_hdf5(f'{wrapper.eazy_out_folder}/photoz.h5')
     return wrapper
+
