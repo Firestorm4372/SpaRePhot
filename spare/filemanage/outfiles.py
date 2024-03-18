@@ -11,10 +11,13 @@ __all__ = ['RunManager']
 class RunManager():
 
     def __init__(self, config_file:str='config.yml') -> None:
-        # extract location of output folder
-        # create if not exist
+        # get config file
+        self.config_file = config_file
         with open(config_file) as f:
             self.config = yaml.safe_load(f)
+
+        # extract location of output folder
+        # create if not exist
         self.folder = self.config['output']['folder']
         os.makedirs(self.folder, exist_ok=True)
 
@@ -106,3 +109,16 @@ class RunManager():
         with open(filepath, 'w') as f:
             f.write(description)
 
+
+    def make_config_copy(self, filepath:str) -> None:
+        """
+        Copy config location to filepath.
+        Note filepath should include the name to save the config under.
+
+        Parameters
+        ----------
+        filepath : str
+            Where to save config file, including name.
+        """
+
+        shutil.copy(self.config_file, filepath)
