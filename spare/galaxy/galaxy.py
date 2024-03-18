@@ -1,6 +1,11 @@
 from typing import Literal
+import os
 
+import json
 import numpy as np
+
+
+__all__ = ['Galaxy', 'load_galaxy_from_folder']
 
 
 class Galaxy():
@@ -97,3 +102,58 @@ class Galaxy():
         if verbose:
             print('\nDone')
 
+
+    def save_data(self, folder:str) -> None:
+        """
+        Save data from galaxy into given folder
+
+        Parameters
+        ----------
+        folder : str
+            Where to save galaxy data to
+        """
+
+        os.makedirs(folder, exist_ok=True)
+        with open(f'{folder}/info.txt', 'w') as f:
+                json.dump(self.info_dict(), f)
+
+        np.savez(f'{folder}/values.npz', **self.values)
+        np.savez(f'{folder}/errors.npz', **self.errors)
+        np.save(f'{folder}/segmap.npy', self.segmap)
+
+
+    def __key(self) -> tuple:
+        return (self.id, *self.centroid, self.shape, *self.values.keys())
+
+    def __hash__(self) -> int:
+        return hash(self.__key())
+    
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, Galaxy):
+            return self.__key() == other.__key()
+        else:
+            return False
+
+
+def load_galaxy_from_folder(folder:str) -> Galaxy:
+    """
+    Load galaxy from from given folder path
+
+    Returns
+    -------
+    galaxy : Galaxy
+        Loaded object
+    """
+
+    with open(f'{folder}/info.txt') as f:
+        info = json.load(f)
+    
+    values = np.load(f'{folder}/values.npz')
+    errors = np.load(f'{folder}/errors.npz')
+    segmap = np.load(f'{folder}/segmap.npy')
+
+    bbox = ((info['ymin'], info['ymax']), (info['xmin'], info['xmax']))
+
+    galaxy = Galaxy(info['id'], info['centroid'], bbox, values, errors, segmap)
+
+    return galaxy

@@ -26,6 +26,9 @@ class TestGalaxy(unittest.TestCase):
         self.filter_key = [k for k in self.galaxy.errors.keys()][0]
         self.galaxy.errors[self.filter_key][0,0] = -999
 
+        self.rm = spare.filemanage.RunManager()
+        self.run_id = self.rm.add_run('test', 1)
+
     def test_id_in_segmap(self):
         self.assertTrue(np.isin(self.galaxy.id, self.galaxy.segmap))
     
@@ -40,25 +43,36 @@ class TestGalaxy(unittest.TestCase):
         pixel = self.galaxy.errors[self.filter_key][0,0]
         self.assertEqual(-9999, pixel)
 
+    def test_save_load(self):
+        folder = self.rm.run_folder(self.run_id)
+
+        self.galaxy.save_data(folder)
+        new = spare.galaxy.load_galaxy_from_folder(folder)
+
+        self.assertEqual(self.galaxy, new)
+
+    def tearDown(self) -> None:
+        self.rm.delete_run(self.run_id)
+
 
 class TestOverManageAndSave(unittest.TestCase):
     def setUp(self) -> None:
-        self.fm = spare.filemanage.RunManager()
+        self.rm = spare.filemanage.RunManager()
         self.selection = spare.EAZYprep.SelectionGalaxies([spare.extract_galaxy(id, spare.filemanage.Data()) for id in [55733, 74977, 183348]])
-        if self.fm.runs_df.shape[0] == 0:
+        if self.rm.runs_df.shape[0] == 0:
             self.run_id_to_delete = 0
         else:
-            self.run_id_to_delete = self.fm.runs_df.index[-1] + 1
+            self.run_id_to_delete = self.rm.runs_df.index[-1] + 1
 
     def testGoodSave(self) -> None:
         self.selection.save_selection('test')
         run_id = self.selection.run_id
-        with open(f'{self.fm.run_folder(run_id)}/galaxies/0/info.txt') as f:
+        with open(f'{self.rm.run_folder(run_id)}/galaxies/0/info.txt') as f:
             id = json.load(f)['id']
         self.assertEqual(id, 55733)
 
     def tearDown(self) -> None:
-        self.fm.delete_run(self.run_id_to_delete)
+        self.rm.delete_run(self.run_id_to_delete)
 
 if __name__ == '__main__':
     unittest.main()

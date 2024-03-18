@@ -1,6 +1,5 @@
 import os
 
-import json
 import numpy as np
 import pandas as pd
 
@@ -55,14 +54,7 @@ class SelectionGalaxies():
         
         for i, galaxy in enumerate(self.galaxies):
             folder = f'{galaxies_folder}/{i}'
-            os.makedirs(folder)
-
-            with open(f'{folder}/info.txt', 'w') as f:
-                json.dump(galaxy.info_dict(), f)
-
-            np.savez(f'{folder}/values.npz', **galaxy.values)
-            np.savez(f'{folder}/errors.npz', **galaxy.errors)
-            np.save(f'{folder}/segmap.npy', galaxy.segmap)
+            galaxy.save_data(folder)
 
 
 class FileEAZY():
