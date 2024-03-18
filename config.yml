@@ -6,7 +6,7 @@ output:
 images:
   folder: /home/jades/jades-data/GOODS-S/images/JWST/JADES/v0.9
   # expects structure of filter/mosaic.fits
-  filename: mosaic_?.fits # use ? for placeholder for filter
+  filename: mosaic_?.conv.fits # use ? for placeholder for filter
 
 catalogs:
   folder: /home/jades/jades-data/GOODS-S/catalogs/JWST/JADES/v0.9
