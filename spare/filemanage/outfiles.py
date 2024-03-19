@@ -20,6 +20,8 @@ class RunManager():
         # create if not exist
         self.folder = self.config['output']['folder']
         os.makedirs(self.folder, exist_ok=True)
+        self.folder_runs = f'{self.folder}/runs'
+        os.makedirs(self.folder_runs, exist_ok=True)
 
         self._extract_runs()
 
@@ -68,14 +70,14 @@ class RunManager():
         self.runs_df.sort_index()
         self._runs_to_csv()
 
-        os.makedirs(f'{self.folder}/{id}_{name}')
+        os.makedirs(f'{self.folder_runs}/{id}_{name}')
 
         return id
 
 
     def run_folder(self, run_id:int) -> str:
         self._extract_runs()
-        return f"{self.folder}/{run_id}_{self.runs_df.loc[run_id]['name']}"
+        return f"{self.folder_runs}/{run_id}_{self.runs_df.loc[run_id]['name']}"
 
     
     def delete_run(self, run_id:int) -> None:
