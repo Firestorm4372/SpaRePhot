@@ -58,7 +58,7 @@ class TestGalaxy(unittest.TestCase):
 class TestOverManageAndSave(unittest.TestCase):
     def setUp(self) -> None:
         self.rm = spare.filemanage.RunManager()
-        self.selection = spare.eazymanage.SelectionGalaxies([spare.extract_galaxy(id, spare.filemanage.Data()) for id in [55733, 74977, 183348]])
+        self.selection = spare.photometry.SelectionGalaxies([spare.extract_galaxy(id, spare.filemanage.Data()) for id in [55733, 74977, 183348]])
         if self.rm.runs_df.shape[0] == 0:
             self.run_id_to_delete = 0
         else:

@@ -4,7 +4,7 @@ import numpy as np
 
 from .filemanage import Data
 from .galaxy import Galaxy
-from .eazymanage import SelectionGalaxies, FileEAZY, WrapperEAZY
+from .photometry import SelectionGalaxies, FileEAZY, WrapperEAZY
 
 
 __all__ = ['random_id', 'extract_galaxy', 'prep_for_EAZY', 'run_on_galaxies']

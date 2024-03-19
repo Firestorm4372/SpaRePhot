@@ -1,7 +1,7 @@
 from . import filemanage
 from . import galaxy
 
-from . import eazymanage
+from . import photometry
 
 from . import viewer
 
