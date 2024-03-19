@@ -19,8 +19,6 @@ class PhotGalaxy(Galaxy):
         self.zgrid = zgrid
         self.zbest = zbest
         self.chi2 = chi2
-        # self.zbest_shape = zbest.reshape(self.shape)
-        # self.chi2_shape = chi2.reshape([*self.shape, self.chi2.shape[-1]])
 
         self.total_chi2:np.ndarray|None = None
         self.zchi2:float|None = None
@@ -28,6 +26,12 @@ class PhotGalaxy(Galaxy):
     def __repr__(self) -> str:
         string =  super().__repr__()
         return f'Phot{string}'
+    
+    def zbest_reshaped(self) -> np.ndarray:
+        return self.zbest.reshape(self.shape)
+    
+    def chi2_reshaped(self) -> np.ndarray:
+        return self.chi2.reshape([*self.shape, self.chi2.shape[-1]])
     
 
     def calc_zchi2(self) -> None:

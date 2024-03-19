@@ -2,7 +2,7 @@ import yaml
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .galaxy import Galaxy
+from .galaxy import Galaxy, PhotGalaxy
 
 def show_galaxy(galaxy:Galaxy, normalise_separate:bool=True, config_file:str='config.yml') -> plt.Figure:
 
@@ -41,3 +41,17 @@ def show_galaxy(galaxy:Galaxy, normalise_separate:bool=True, config_file:str='co
     axs[1].imshow(rgb, origin='lower')
 
     return fig
+
+
+def show_redshift(galaxy:PhotGalaxy) -> plt.Figure:
+    zbest = galaxy.zbest_reshaped()
+
+    fig, ax = plt.subplots()
+    ax:plt.Axes
+    ax.imshow(zbest, cmap='Reds')
+    for i, row in enumerate(zbest):
+        for j, z in enumerate(row):
+            _ = ax.text(j, i, f'{z:.1f}', ha='center', va='center', color='w')
+
+    return fig
+
