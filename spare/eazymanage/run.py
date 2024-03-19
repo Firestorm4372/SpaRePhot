@@ -4,7 +4,10 @@ import numpy as np
 import eazy
 import eazy.hdf5
 
-from .filemanage import RunManager
+from ..filemanage import RunManager
+
+
+__all__ = ['WrapperEAZY', 'init_wrapper_from_hdf5']
 
 
 class WrapperEAZY():

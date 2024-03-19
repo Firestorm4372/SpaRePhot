@@ -3,8 +3,11 @@ import os
 import numpy as np
 import pandas as pd
 
-from .filemanage import RunManager
-from .galaxy import Galaxy
+from ..filemanage import RunManager
+from ..galaxy import Galaxy
+
+
+__all__ = ['SelectionGalaxies', 'FileEAZY']
 
 
 class SelectionGalaxies():
