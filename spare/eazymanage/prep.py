@@ -115,8 +115,9 @@ class FileEAZY():
     def _create_dataframe(self) -> pd.DataFrame:
         galaxy_dfs = []
 
-        for galaxy in self.galaxies:
+        for idx, galaxy in enumerate(self.galaxies):
             id_cols = {
+                'galaxy_idx': np.full(galaxy.size, idx, dtype=int),
                 'galaxy_id': np.full(galaxy.size, galaxy.id, dtype=int),
                 'pixel_id': galaxy.pixel_ids_flat,
             }
