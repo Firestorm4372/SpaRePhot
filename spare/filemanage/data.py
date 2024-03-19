@@ -94,8 +94,8 @@ class Data():
             self.size_cat = Table(hdul['SIZE'].data)
             self.size_cat.add_index('ID')
             try:
-                self.phot_cat = Table(hdul['PHOTOZ'].data)
-                self.phot_cat.add_index('ID')
+                self.photoz_cat = Table(hdul['PHOTOZ'].data)
+                self.photoz_cat.add_index('ID')
             except:
                 print('Warning: No PHOTOZ table found in catalog')
                 
