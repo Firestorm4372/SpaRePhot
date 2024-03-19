@@ -157,3 +157,4 @@ def load_galaxy_from_folder(folder:str) -> Galaxy:
     galaxy = Galaxy(info['id'], info['centroid'], bbox, values, errors, segmap)
 
     return galaxy
+

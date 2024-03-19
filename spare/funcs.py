@@ -139,11 +139,13 @@ def run_on_galaxies(
         border:int=0,
         replace_unused:bool=False, unused:float|None=None, replace:float|None=None, using:Literal['values', 'errors']='errors', verbose_replace:bool=False,
         add_params:dict|None=None, param_file:str|None=None, translate_file:str='eazy_files/z_phot.translate',
+        save_output:bool=True,
         description:str|None=None, config_file:str='config.yml'
     ) -> tuple[int, WrapperEAZY]:
     """
     Will perform a full run with EAZY on the given galaxies.
     Create and save all data for an EAZY run, then do run.
+    Default behaviour saves results to run file.
 
     Parameters
     ----------
@@ -172,6 +174,9 @@ def run_on_galaxies(
         If set, uses this param_file for EAZY run
     translate_file : str, default 'eazy_files/z_phot.translate'
         Translate file for use in photoz initialisation
+
+    save_output : bool, True
+        Controls if output is saved
         
     description : str | None, default None
         Optional description to add to the run
@@ -189,7 +194,8 @@ def run_on_galaxies(
     run_id = prep_for_EAZY(name, ids, border, replace_unused, unused, replace, using, verbose_replace, description, config_file)
 
     runner = WrapperEAZY(run_id, config_file)
-    runner.init_and_run_EAZY(add_params, param_file, translate_file)
+    runner.init_and_run_EAZY(save_output, add_params, param_file, translate_file)
+
 
     return run_id, runner
 

@@ -1,5 +1,6 @@
 import os
 
+import numpy as np
 import eazy
 import eazy.hdf5
 
@@ -68,21 +69,55 @@ class WrapperEAZY():
         # create photoz object
         self.photoz = eazy.photoz.PhotoZ(param_file=param_file, params=params, translate_file=translate_file)
 
-    def run_EAZY_fit(self) -> None:
+    def run_EAZY_fit(self, save_to_hdf5:bool=True) -> None:
         """
         Run EAZY using the current photoz object.
         Saves instance to hdf5 file.
+
+        Parameters
+        ----------
+        save_to_hdf5 : bool, default True
+            Controls whether photoz object is saved using hdf5
         """
         
         if self.photoz is None:
             raise Exception('Need to init photoz object')
 
         self.photoz.fit_catalog()
-        os.makedirs(self.eazy_out_folder, exist_ok=True)
-        eazy.hdf5.write_hdf5(self.photoz, f'{self.eazy_out_folder}/photoz.h5')
+        
+        if save_to_hdf5:
+            os.makedirs(self.eazy_out_folder, exist_ok=True)
+            eazy.hdf5.write_hdf5(self.photoz, f'{self.eazy_out_folder}/photoz.h5')
+
+    def save_EAZY_data(self, folder:str|None=None) -> None:
+        """
+        Saves relevant EAZY data from the fit as npz file.
+        Saved in same location as hdf5 if no location specified.
+
+        Parameters
+        ----------
+        folder : str | None, default None
+            If specified, will save in that folder instead
+        """
+
+        if self.photoz is None:
+            raise Exception('Must have photoz object instantiated')
+        if not np.any(self.photoz.zbest):
+            print('Warning: All zbest values are zero')
+
+        fit_data = {
+            'zgrid': self.photoz.zgrid,
+            'zbest': self.photoz.zbest,
+            'chi2': self.photoz.chi2_fit
+        }
+
+        if folder is None:
+            folder = self.eazy_out_folder
+
+        np.savez(f'{folder}/fit_data.npz', **fit_data)
 
 
-    def init_and_run_EAZY(self, add_params:dict|None=None, param_file:str|None=None, translate_file:str='eazy_files/z_phot.translate') -> None:
+    def init_and_run_EAZY(self, save_output:bool=True, add_params:dict|None=None, param_file:str|None=None, translate_file:str='eazy_files/z_phot.translate') -> None:
         """
         Perform both the initialisation of photoz object and run of EAZY.
 
@@ -92,6 +127,8 @@ class WrapperEAZY():
 
         Parameters
         ----------
+        save_output : bool, default True
+            Controls if output from the run is saved
         add_params : dict | None, default None
             If set, will include these additional parameters
         param_file : str | None, default None
@@ -101,7 +138,9 @@ class WrapperEAZY():
         """
 
         self.init_photoz(add_params, param_file, translate_file)
-        self.run_EAZY_fit()
+        self.run_EAZY_fit(save_to_hdf5=save_output)
+        if save_output:
+            self.save_EAZY_data()
 
 
 
