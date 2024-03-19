@@ -120,7 +120,9 @@ class FileEAZY():
             cols = id_cols | self.extract_pixel_data(galaxy)
             galaxy_dfs.append(pd.DataFrame(cols))
 
-        return pd.concat(galaxy_dfs)
+        df = pd.concat(galaxy_dfs, ignore_index=True)
+
+        return df
     
     def save_csv_file(self, filepath:str) -> None:
         df = self._create_dataframe()
