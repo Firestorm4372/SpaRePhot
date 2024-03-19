@@ -92,7 +92,12 @@ class Data():
 
         with fits.open(self.paths.phot_cat) as hdul:
             self.size_cat = Table(hdul['SIZE'].data)
-        self.size_cat.add_index('ID')
+            self.size_cat.add_index('ID')
+            try:
+                self.phot_cat = Table(hdul['PHOTOZ'].data)
+                self.phot_cat.add_index('ID')
+            except:
+                print('Warning: No PHOTOZ table found in catalog')
                 
         with fits.open(self.paths.segmap) as hdul:
             self.segmap:np.ndarray = hdul[0].data
