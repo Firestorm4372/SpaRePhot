@@ -83,7 +83,7 @@ def redshift(galaxy:PhotGalaxy, show_text:bool=False) -> plt.Figure:
 def segmap_image_redshift(galaxy:PhotGalaxy, normalise_separate:bool=True, show_text:bool=False, config_file:str='config.yml') -> plt.Figure:
     mosaic = """
     SIR
-    CCC
+    BBB
     """
     fig, axs = plt.subplot_mosaic(mosaic, height_ratios=[1, 0.05])
 
@@ -91,7 +91,7 @@ def segmap_image_redshift(galaxy:PhotGalaxy, normalise_separate:bool=True, show_
     _ax_rgb(axs['I'], galaxy, normalise_separate, config_file)
     _ax_redshift(axs['R'], galaxy, show_text)
 
-    fig.colorbar(axs['R'].get_images()[0], cax=axs['C'], orientation='horizontal')
+    fig.colorbar(axs['R'].get_images()[0], cax=axs['B'], orientation='horizontal')
 
     fig.tight_layout()
     fig.set_figheight(0.7 * fig.get_figheight())

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from ..galaxy import PhotGalaxy
-
+from . import images
 
 
 def _ax_single_chi2(ax:plt.Axes, zgrid:np.ndarray, chi2:np.ndarray, zbest:float, zmark:float|None=None):
@@ -23,7 +23,7 @@ def pixel_chi2(galaxy:PhotGalaxy, x_idx:int, y_idx:int, zmark:float|None=None) -
 
     return fig
 
-def total_chi2(galaxy:PhotGalaxy, zmark:float|None=None) -> plt.Figure:
+def _total_chi2_values(galaxy:PhotGalaxy) -> tuple[np.ndarray, np.ndarray, float]:
     zgrid = galaxy.zgrid
 
     if galaxy.total_chi2 is None:
@@ -31,7 +31,34 @@ def total_chi2(galaxy:PhotGalaxy, zmark:float|None=None) -> plt.Figure:
     chi2 = galaxy.total_chi2
     zbest = galaxy.zchi2
 
+    return zgrid, chi2, zbest
+
+def total_chi2(galaxy:PhotGalaxy, zmark:float|None=None) -> plt.Figure:
     fig, ax = plt.subplots()
-    _ax_single_chi2(ax, zgrid, chi2, zbest, zmark)
+    _ax_single_chi2(ax, *_total_chi2_values(galaxy), zmark)
+
+    return fig
+
+def views_and_total_chi2(galaxy:PhotGalaxy,
+                         normalise_separate:bool=True, show_text:bool=False, config_file:str='config.yml',
+                         zmark:float|None=None
+                         ) -> plt.Figure:
+    mosaic = """
+    SIR
+    BBB
+    CCC
+    """
+    fig, axs = plt.subplot_mosaic(mosaic, height_ratios=[1, 0.05, 1.5])
+
+    images._ax_segmap(axs['S'], galaxy)
+    images._ax_rgb(axs['I'], galaxy, normalise_separate, config_file)
+    images._ax_redshift(axs['R'], galaxy, show_text)
+
+    fig.colorbar(axs['R'].get_images()[0], cax=axs['B'], orientation='horizontal')
+
+    _ax_single_chi2(axs['C'], *_total_chi2_values(galaxy), zmark)
+
+    fig.tight_layout()
+    fig.set_figheight(1.3 * fig.get_figheight())
 
     return fig
