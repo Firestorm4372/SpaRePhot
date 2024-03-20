@@ -56,8 +56,8 @@ class WrapperEAZY():
                 'FILTERS_RES': 'eazy_files/FILTER.RES.latest',
                 'TEMPLATES_FILE': 'templates/JADES/JADES_fsps_local.param',
                 'APPLY_PRIOR': 'n',
-                'Z_MIN': 1.,
-                'Z_MAX': 16.,
+                'Z_MIN': 0.,
+                'Z_MAX': 20.,
                 'Z_STEP': 0.01,
                 'OUTPUT_DIRECTORY': self.eazy_out_folder,
                 'MAIN_OUTPUT_FILE': f'{self.eazy_out_folder}/photoz'

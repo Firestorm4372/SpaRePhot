@@ -43,15 +43,17 @@ def show_galaxy(galaxy:Galaxy, normalise_separate:bool=True, config_file:str='co
     return fig
 
 
-def show_redshift(galaxy:PhotGalaxy) -> plt.Figure:
+def show_redshift(galaxy:PhotGalaxy, show_text:bool=True) -> plt.Figure:
     zbest = galaxy.zbest_reshaped()
 
     fig, ax = plt.subplots()
     ax:plt.Axes
-    ax.imshow(zbest, cmap='Reds')
-    for i, row in enumerate(zbest):
-        for j, z in enumerate(row):
-            _ = ax.text(j, i, f'{z:.1f}', ha='center', va='center', color='w')
+    ax.imshow(zbest, cmap='Reds', origin='lower')
+
+    if show_text:
+        for i, row in enumerate(zbest):
+            for j, z in enumerate(row):
+                _ = ax.text(j, i, f'{z:.1f}', ha='center', va='center', color='w')
 
     return fig
 
