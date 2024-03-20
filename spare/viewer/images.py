@@ -2,7 +2,10 @@ import yaml
 import numpy as np
 import matplotlib.pyplot as plt
 
-from .galaxy import Galaxy, PhotGalaxy
+from ..galaxy import Galaxy, PhotGalaxy
+
+
+__all__ = ['_ax_segmap', '_ax_rgb', '_ax_redshift', 'segmap_image', 'redshift', 'segmap_image_redshift']
 
 
 def _ax_segmap(ax:plt.Axes, galaxy:Galaxy) -> None:
@@ -42,7 +45,6 @@ def _ax_rgb(ax:plt.Axes, galaxy:Galaxy, normalise_separate:bool, config_file:str
 def _ax_redshift(ax:plt.Axes, galaxy:PhotGalaxy, show_text:bool) -> None:
     # get zbest and mask failures
     zbest = galaxy.zbest_reshaped()
-    zbest = np.ma.masked_where(zbest == -1, zbest)
     # use a cmap with this mask
     cmap = plt.get_cmap('Reds')
     cmap.set_bad(color='blue')
