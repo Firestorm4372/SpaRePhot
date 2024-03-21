@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from ..galaxy import PhotGalaxy
-from . import images
+from . import views
 
 
 def _ax_single_chi2(ax:plt.Axes, zgrid:np.ndarray, chi2:np.ndarray, zbest:float, zmark:float|None=None):
@@ -21,6 +21,11 @@ def pixel_chi2(galaxy:PhotGalaxy, x_idx:int, y_idx:int, zmark:float|None=None) -
     fig, ax = plt.subplots()
     _ax_single_chi2(ax, zgrid, chi2, zbest, zmark)
 
+    title = f'ID:{galaxy.id} x={x_idx} y={y_idx}'
+    if zmark is not None:
+        title += f' zmark={zmark}'
+    fig.suptitle(title)
+
     return fig
 
 def _total_chi2_values(galaxy:PhotGalaxy) -> tuple[np.ndarray, np.ndarray, float]:
@@ -37,6 +42,11 @@ def total_chi2(galaxy:PhotGalaxy, zmark:float|None=None) -> plt.Figure:
     fig, ax = plt.subplots()
     _ax_single_chi2(ax, *_total_chi2_values(galaxy), zmark)
 
+    title = f'ID:{galaxy.id}'
+    if zmark is not None:
+        title += f' zmark={zmark}'
+    fig.suptitle(title)
+
     return fig
 
 def views_and_total_chi2(galaxy:PhotGalaxy,
@@ -50,15 +60,20 @@ def views_and_total_chi2(galaxy:PhotGalaxy,
     """
     fig, axs = plt.subplot_mosaic(mosaic, height_ratios=[1, 0.05, 1.5])
 
-    images._ax_segmap(axs['S'], galaxy)
-    images._ax_rgb(axs['I'], galaxy, normalise_separate, config_file)
-    images._ax_redshift(axs['R'], galaxy, show_text)
+    views._ax_segmap(axs['S'], galaxy)
+    views._ax_rgb(axs['I'], galaxy, normalise_separate, config_file)
+    views._ax_redshift(axs['R'], galaxy, show_text)
 
     fig.colorbar(axs['R'].get_images()[0], cax=axs['B'], orientation='horizontal')
 
     _ax_single_chi2(axs['C'], *_total_chi2_values(galaxy), zmark)
 
     fig.tight_layout()
-    fig.set_figheight(1.3 * fig.get_figheight())
+    fig.set_figheight(1.5 * fig.get_figheight())
+
+    title = f'ID:{galaxy.id}'
+    if zmark is not None:
+        title += f' zmark={zmark}'
+    fig.suptitle(title)
 
     return fig

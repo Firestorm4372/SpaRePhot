@@ -1,2 +1,2 @@
-from .images import *
+from .views import *
 from .photoz import *
