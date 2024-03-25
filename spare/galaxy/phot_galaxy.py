@@ -6,7 +6,7 @@ from .galaxy import Galaxy
 class PhotGalaxy(Galaxy):
     """
     zbest and chi2 should be passed as 1D and 2D arrays respective
-    Will be reshaped by the init
+    Later have functions to produced reshaped
     """
 
     def __init__(

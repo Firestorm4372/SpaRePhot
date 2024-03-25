@@ -25,6 +25,9 @@ class Galaxy():
         Value and error images for each of the filters
     segmap : array
         Segmentation image
+
+    Attributes (additional)
+    ----------
     shape, size : tuple, int
         Shape and size of all images in the object
     pixel_ids : ndarray

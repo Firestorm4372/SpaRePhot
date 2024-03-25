@@ -5,6 +5,8 @@ import pandas as pd
 from ..filemanage import RunManager
 from ..galaxy import PhotGalaxy
 
+__all__ = ['Extract']
+
 class Extract():
 
     def __init__(self, run_id:int, config_file:str='config.yml') -> None:
@@ -81,7 +83,7 @@ class Extract():
     def extract_galaxies(self) -> None:
         """
         Extract all galaxies from the run as `PhotGalaxy` objects.
-        Placed into `galaxies`
+        Placed into `galaxies` attribute
         """
 
         self.galaxies = []
@@ -95,10 +97,12 @@ class Extract():
             zbest = self.zbest[galaxy_slice]
             chi2 = self.chi2[galaxy_slice, :]
 
-            self.galaxies.append(PhotGalaxy(
-                info['id'], info['centroid'], bbox,
-                values, errors, segmap,
-                self.zgrid, zbest, chi2
-            ))
+            self.galaxies.append(
+                PhotGalaxy(
+                    info['id'], info['centroid'], bbox,
+                    values, errors, segmap,
+                    self.zgrid, zbest, chi2
+                )
+            )
             
             

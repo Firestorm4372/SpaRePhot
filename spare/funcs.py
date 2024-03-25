@@ -70,6 +70,10 @@ def extract_galaxy(id: int, data:Data, border:int=0) -> Galaxy:
     return Galaxy(id, centroid, bbox, values, errors, segmap)
 
 
+def get_catalog_z_phot(id:int, data:Data) -> float:
+    return data.photoz_cat.loc[id]['EAZY_z_a']
+
+
 def prep_for_EAZY(
         name:str, ids:list[int], border:int=0,
         replace_unused:bool=False, unused:float|None=None, replace:float|None=None, using:Literal['values', 'errors']='errors', verbose_replace:bool=False,
