@@ -5,7 +5,8 @@ import matplotlib.pyplot as plt
 from ..galaxy import Galaxy, PhotGalaxy
 
 
-__all__ = ['_ax_segmap', '_ax_rgb', '_ax_redshift', 'segmap_image', 'redshift', 'segmap_image_redshift']
+__all__ = ['_ax_segmap', '_ax_rgb', '_ax_redshift', '_ax_max_chi2',
+           'segmap_image', 'redshift', 'segmap_image_redshift', 'max_chi2']
 
 
 def _ax_segmap(ax:plt.Axes, galaxy:Galaxy) -> None:
@@ -56,6 +57,19 @@ def _ax_redshift(ax:plt.Axes, galaxy:PhotGalaxy, show_text:bool) -> None:
             for j, z in enumerate(row):
                 _ = ax.text(j, i, f'{z:.1f}', ha='center', va='center', color='w')
 
+def _ax_max_chi2(ax:plt.Axes, galaxy:PhotGalaxy, max_value:float|None=None) -> None:
+    chi2 = galaxy.chi2_reshaped()
+    max_chi2 = np.max(chi2, axis=2)
+
+    cmap = plt.get_cmap('plasma').reversed()
+    cmap.set_bad(color='green')
+
+    if (max_value is None) or (np.max(max_chi2) < max_value):
+        ax.imshow(max_chi2, cmap=cmap, origin='lower')
+    else:
+        ax.imshow(max_chi2, cmap=cmap, origin='lower', vmax=max_value)
+        
+
 
 def segmap_image(galaxy:Galaxy, normalise_separate:bool=True, config_file:str='config.yml') -> plt.Figure:
     fig, axs = plt.subplots(1, 2, sharex=True, sharey=True)
@@ -99,3 +113,13 @@ def segmap_image_redshift(galaxy:PhotGalaxy, normalise_separate:bool=True, show_
     fig.suptitle(f'ID: {galaxy.id}')
 
     return fig
+
+
+def max_chi2(galaxy:PhotGalaxy, max_value:float|None=None) -> plt.Figure:
+    fig, ax = plt.subplots()
+    _ax_max_chi2(ax, galaxy, max_value)
+
+    fig.suptitle(f'ID: {galaxy.id}')
+
+    return fig
+
