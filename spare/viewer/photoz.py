@@ -5,12 +5,22 @@ from ..galaxy import PhotGalaxy
 from . import views
 
 
-def _ax_single_chi2(ax:plt.Axes, zgrid:np.ndarray, chi2:np.ndarray, zbest:float, zmark:float|None=None):
+__all__ = ['_ax_single_chi2',
+           '_total_chi2_values',
+           'pixel_chi2', 'total_chi2', 'views_and_total_chi2']
+
+
+def _ax_single_chi2(ax:plt.Axes, zgrid:np.ndarray, chi2:np.ndarray, zbest:float|None=None, zmark:float|None=None):
     ax.plot(zgrid, chi2, '-', label='chi2')
-    ax.axvline(zbest, label='z_best')
+
+    if zbest is not None:
+        ax.axvline(zbest, label='z_best')
+
     if zmark is not None:
         ax.axvline(zmark, color='black', label='z_mark')
-    ax.legend()
+    
+    if (zbest is not None) or (zmark is not None):
+        ax.legend()
 
 def pixel_chi2(galaxy:PhotGalaxy, x_idx:int, y_idx:int, zmark:float|None=None) -> plt.Figure:
     zgrid = galaxy.zgrid
@@ -77,3 +87,4 @@ def views_and_total_chi2(galaxy:PhotGalaxy,
     fig.suptitle(title)
 
     return fig
+
