@@ -113,7 +113,8 @@ def prep_for_EAZY(
     """
 
     # create galaxy selection
-    galaxies = [extract_galaxy(id, Data(config_file), border) for id in ids]
+    data = Data(config_file)
+    galaxies = [extract_galaxy(id, data, border) for id in ids]
     selection = SelectionGalaxies(galaxies, config_file)
 
     if replace_unused:
