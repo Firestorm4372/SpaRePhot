@@ -5,20 +5,65 @@ from .galaxy import Galaxy
 
 class PhotGalaxy(Galaxy):
     """
-    zbest and chi2 should be passed as 1D and 2D arrays respective
-    Later have functions to produced reshaped
+    Used to store galaxies after the photometric method has been applied.
+
+    `zbest` and `chi2` should be passed as 1D and 2D arrays respective.
+    Later have functions to produced reshaped.
+
+    Parameters
+    ----------
+    id : int
+        Survey id of the object
+    centroid : tuple[float]
+        (Y,X) position of the centre of the object
+    bbox : array
+        Bounding box for the object.
+        In the form ((YMIN, YMAX), (XMIN, XMAX))
+    values, errors : dict[str, array]
+        Value and error images for each of the filters
+    segmap : array
+        Segmentation image
+
+    EAZY_ids : 1D array
+        ids of each pixel within the EAZY run the galaxy has been extracted from
+    zgrid : 1D array
+        The zgrid used by the EAZY run
+    zbest: 1D array
+        The values of `zbest` produced by EAZY for each of the pixels.
+        Pixels where the fit fails are masked out
+    chi2 : 2D array
+        Array of each of the chi squared distributions for each of the pixels.
+        Pixels where the fit fails are masked out
+    no_fit_value : float, default -1
+        The value assigned to a pixels `zbest` when the EAZY fit fails
+
+    Attributes (additional)
+    ----------
+    shape, size : tuple, int
+        Shape and size of all images in the object
+    pixel_ids : ndarray
+        ids map of the different pixels in the galaxy, increasing first in x (`pixel_ids[0,1]=1` etc)
+
+    no_fit_mask : 1D ndarray
+        Mask used to signal that pixels failed to fit with EAZY
+    total_chi2 : 1D ndarray | None, default None
+        The chi2 distribution produce from summing all pixels in the galaxy.
+        Calculated using method `calc_zchi2`
+    zchi2 : float | None, default None
+        The redshift at the minimum of the total chi2 distribution.
+        Calculated using method `calc_zchi2`
     """
 
     def __init__(
-        self, id:int, centroid:tuple[float], bbox:np.ndarray,
-        values:dict[str,np.ndarray], errors:dict[str, np.ndarray], segmap:np.ndarray,
-        EAZY_ids:np.ndarray,
-        zgrid:np.ndarray, zbest:np.ndarray, chi2:np.ndarray,
-        no_fit_value:float=-1
+        self, id: int, centroid: tuple[float], bbox: np.ndarray,
+        values: dict[str,np.ndarray], errors: dict[str, np.ndarray], segmap: np.ndarray,
+        EAZY_ids: np.ndarray,
+        zgrid: np.ndarray, zbest: np.ndarray, chi2: np.ndarray,
+        no_fit_value: float = -1
     ) -> None:
         super().__init__(id, centroid, bbox, values, errors, segmap)
 
-        self.EAZY_ids = EAZY_ids
+        self.EAZY_ids = np.asarray(EAZY_ids)
 
         self.zgrid = zgrid
 
@@ -53,7 +98,7 @@ class PhotGalaxy(Galaxy):
         self.zchi2 = self.zgrid[np.argmin(self.total_chi2)]
 
     
-    def calc_zchi2_pixels(self, pixels:np.ndarray|None=None) -> tuple[float, np.ndarray]:
+    def calc_zchi2_pixels(self, pixels: np.ndarray | None = None) -> tuple[float, np.ndarray]:
         """
         Estimate redshift using chi2 method, but only with pixels given
 

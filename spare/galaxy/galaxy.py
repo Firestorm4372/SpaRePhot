@@ -10,7 +10,8 @@ __all__ = ['Galaxy', 'load_galaxy_from_folder']
 
 class Galaxy():
     """
-    Base class for a single galaxy (object)
+    Base class for a single galaxy (object).
+    Store photometric images (fluxes and errors), along with the segmap.
 
     Parameters
     ----------
@@ -35,8 +36,8 @@ class Galaxy():
     """
 
     def __init__(
-            self, id:int, centroid:tuple[float], bbox:np.ndarray,
-            values:dict[str, np.ndarray], errors:dict[str, np.ndarray], segmap:np.ndarray
+            self, id: int, centroid: tuple[float], bbox: np.ndarray,
+            values: dict[str, np.ndarray], errors: dict[str, np.ndarray], segmap: np.ndarray
         ) -> None:
         
         self.id = id
@@ -75,7 +76,12 @@ class Galaxy():
         }
     
 
-    def replace_unused_with_constant(self, unused:float, replace:float, using:Literal['values', 'errors']='errors', verbose:bool=False) -> None:
+    def replace_unused_with_constant(
+            self,
+            unused: float, replace: float,
+            using: Literal['values', 'errors'] = 'errors',
+            verbose: bool = False
+        ) -> None:
         """
         Set pixels that do not have data to a different value.
         e.g. set all `0.0` pixels to `-9999` so they are recognisable and ignored by EAZY.
@@ -94,7 +100,7 @@ class Galaxy():
             Control verbosity as executing
         """
         
-        using_images:dict[str, np.ndarray] = getattr(self, using)
+        using_images: dict[str, np.ndarray] = getattr(self, using)
 
         if verbose:
             print('Replacing: ')
@@ -110,7 +116,7 @@ class Galaxy():
             print('\nDone')
 
 
-    def save_data(self, folder:str) -> None:
+    def save_data(self, folder: str) -> None:
         """
         Save data from galaxy into given folder
 
@@ -142,7 +148,7 @@ class Galaxy():
             return False
 
 
-def load_galaxy_from_folder(folder:str) -> Galaxy:
+def load_galaxy_from_folder(folder: str) -> Galaxy:
     """
     Load galaxy from from given folder path
 
