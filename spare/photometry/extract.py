@@ -23,6 +23,7 @@ class Extract():
         self.zbest = self.fit_data['zbest']
         self.chi2 = self.fit_data['chi2']
 
+        self.ids = np.asarray(self.catalog['id'])
         self.galaxy_ids = np.unique(self.catalog['galaxy_id'])
         self.galaxy_idxs = np.unique(self.catalog['galaxy_idx'])
 
@@ -94,14 +95,16 @@ class Extract():
             info, values, errors, segmap, bbox = self._load_galaxy_data(folder)
 
             galaxy_slice = self.get_galaxy_slice(idx)
+            EAZY_ids = self.ids[galaxy_slice]
             zbest = self.zbest[galaxy_slice]
             chi2 = self.chi2[galaxy_slice, :]
 
             self.galaxies.append(
                 PhotGalaxy(
-                    info['id'], info['centroid'], bbox,
-                    values, errors, segmap,
-                    self.zgrid, zbest, chi2
+                    id=info['id'], centroid=info['centroid'], bbox=bbox,
+                    values=values, errors=errors, segmap=segmap,
+                    EAZY_ids=EAZY_ids,
+                    zgrid=self.zgrid, zbest=zbest, chi2=chi2
                 )
             )
             

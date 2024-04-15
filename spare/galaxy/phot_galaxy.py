@@ -12,10 +12,13 @@ class PhotGalaxy(Galaxy):
     def __init__(
         self, id:int, centroid:tuple[float], bbox:np.ndarray,
         values:dict[str,np.ndarray], errors:dict[str, np.ndarray], segmap:np.ndarray,
+        EAZY_ids:np.ndarray,
         zgrid:np.ndarray, zbest:np.ndarray, chi2:np.ndarray,
         no_fit_value:float=-1
     ) -> None:
         super().__init__(id, centroid, bbox, values, errors, segmap)
+
+        self.EAZY_ids = EAZY_ids
 
         self.zgrid = zgrid
 
@@ -28,13 +31,15 @@ class PhotGalaxy(Galaxy):
             )
         )
 
-
         self.total_chi2:np.ndarray|None = None
         self.zchi2:float|None = None
 
     def __repr__(self) -> str:
         string =  super().__repr__()
         return f'Phot{string}'
+    
+    def EAZY_ids_reshaped(self) -> np.ndarray:
+        return self.EAZY_ids.reshape(self.shape)
     
     def zbest_reshaped(self) -> np.ndarray:
         return self.zbest.reshape(self.shape)
