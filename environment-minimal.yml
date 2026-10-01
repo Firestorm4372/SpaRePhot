@@ -1,0 +1,13 @@
+name: spare
+channels:
+  - defaults
+dependencies:
+  - python=3.11.8
+  - astropy
+  - scipy=1.11.4
+  - matplotlib
+  - pandas
+  - ipython
+  - tqdm
+  - ipykernel
+  - ipympl
